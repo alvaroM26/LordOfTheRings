@@ -9,17 +9,18 @@ import java.io.File
 @SpringBootApplication
 class LordOfTheRingsApplication
 
+val characterList = Json.decodeFromString<Personajes>(File("character.json").readText())
+
 fun main(args: Array<String>) {
 
 	runApplication<LordOfTheRingsApplication>(*args)
 
-	val filePath = "character.json"
-	val characterList = Json.decodeFromString<Personajes>(File(filePath).readText())
-
-	println(characterList.docs.size)
-
-	characterList.docs.forEach {
-		println(it.name)
-	}
+	println("La lista de personajes tiene:" +characterList.docs.size)
 
 }
+
+/*
+
+TODO: getOthers (no good guy.no bad guy)
+
+ */
