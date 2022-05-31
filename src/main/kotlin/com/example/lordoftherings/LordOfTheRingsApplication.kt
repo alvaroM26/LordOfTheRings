@@ -18,9 +18,3 @@ fun main(args: Array<String>) {
 	println("La lista de personajes tiene:" +characterList.docs.size)
 
 }
-
-/*
-
-TODO: getOthers (no good guy.no bad guy)
-
- */
