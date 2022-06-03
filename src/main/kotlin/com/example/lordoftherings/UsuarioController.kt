@@ -39,21 +39,45 @@ class UsuarioController (private val usuarioRepository: UsuarioRepository) {
 
             if (user.token == token) {
 
-                    for (i in 1..6) {
+                for (i in 1..6) {
 
-                        val personajesAleatorios = characterList.docs.random()
-                        user.listaEquipo.add(personajesAleatorios.name)
-                        usuarioRepository.save(user)
-
-                    }
-
-                    return user.listaEquipo
+                    val personajesAleatorios = characterList.docs.random()
+                    user.listaEquipo.add(personajesAleatorios.name)
+                    usuarioRepository.save(user)
 
                 }
 
+                return user.listaEquipo
+
             }
+
+        }
 
         return "Token no encontrado"
     }
+
+    @PostMapping("liberarPersonaje/{id}/{token}")
+    fun liberarPersona(@PathVariable id : String, @PathVariable token: String): Any{
+
+        usuarioRepository.findAll().forEach { user->
+
+            if (user.token == token){
+
+                user.listaEquipo.forEach {
+
+                    if (user.listaEquipo.contains(id)){
+                        return "Personaje liberado"
+                    }
+
+                }
+                return "El personaje no pertenece al jugador"
+            }
+
+        }
+
+        return "Token invalido"
+
+    }
+
 }
 
