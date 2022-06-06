@@ -42,7 +42,7 @@ class UsuarioController (private val usuarioRepository: UsuarioRepository) {
                 for (i in 1..6) {
 
                     val personajesAleatorios = characterList.docs.random()
-                    user.listaEquipo.add(personajesAleatorios.name)
+                    user.listaEquipo.add((personajesAleatorios.name + " con ID: " + personajesAleatorios.id))
                     usuarioRepository.save(user)
 
                 }
@@ -56,7 +56,7 @@ class UsuarioController (private val usuarioRepository: UsuarioRepository) {
         return "Token no encontrado"
     }
 
-    @PostMapping("liberarPersonaje/{id}/{token}")
+    @PostMapping("liberarPersonaje")
     fun liberarPersona(@PathVariable id : String, @PathVariable token: String): Any{
 
         usuarioRepository.findAll().forEach { user->
@@ -65,7 +65,7 @@ class UsuarioController (private val usuarioRepository: UsuarioRepository) {
 
                 user.listaEquipo.forEach {
 
-                    if (user.listaEquipo.contains(id)){
+                    if (it.contains(id)){
                         return "Personaje liberado"
                     }
 
