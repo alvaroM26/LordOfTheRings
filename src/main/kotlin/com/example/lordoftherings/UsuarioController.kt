@@ -43,14 +43,14 @@ class UsuarioController (private val usuarioRepository: UsuarioRepository) {
 
                     val personajesAleatorios = characterList.docs.random()
 
-                    if (!personajesAleatorios.seleccionado){
+                    if (personajesAleatorios.dueño == null){
                         user.listaEquipo.add(personajesAleatorios.id)
-                        personajesAleatorios.seleccionado = true
+                        personajesAleatorios.dueño = user.token
                         usuarioRepository.save(user)
 
                         characterList.docs.forEach {
                             if (it.id == personajesAleatorios.id){
-                                it.seleccionado = true
+                                it.dueño = user.token
                             }
                         }
 
@@ -83,7 +83,7 @@ class UsuarioController (private val usuarioRepository: UsuarioRepository) {
                         characterList.docs.forEach {
 
                             if (it.id == list)
-                                it.seleccionado = false
+                                it.dueño = null
                         }
 
                         return "Personaje liberado"
@@ -100,4 +100,19 @@ class UsuarioController (private val usuarioRepository: UsuarioRepository) {
         return "Token invalido"
 
     }
+
+    @GetMapping("adentanseEnMazmorra/{token}/{nivel}")
+    fun adentanseEnMazmorra(@PathVariable token: String, @PathVariable nivel : String) : Any{
+
+        usuarioRepository.findAll().forEach {user->
+            if (user.token == token){
+
+            }
+        }
+
+        return "Usuario no encontrado"
+
+    }
+
+
 }

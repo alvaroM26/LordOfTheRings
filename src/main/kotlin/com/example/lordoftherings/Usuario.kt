@@ -5,7 +5,7 @@ import javax.persistence.Entity
 import javax.persistence.Id
 
 @Entity
-data class Usuario(@Id var nombre : String, var pass : String) {
+data class Usuario(@Id var nombre : String, var pass : String, var nivelMazmorra: String) {
 
     var token = nombre+pass
 
