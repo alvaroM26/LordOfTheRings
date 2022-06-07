@@ -13,7 +13,7 @@ data class Personajes (
 data class Doc (
     @SerialName("_id")
     val id: String,
-
+    var seleccionado : Boolean = false,
     val height: String,
     val race: String,
     val gender: String? = null,

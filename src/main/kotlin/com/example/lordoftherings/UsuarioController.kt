@@ -39,11 +39,22 @@ class UsuarioController (private val usuarioRepository: UsuarioRepository) {
 
             if (user.token == token) {
 
-                for (i in 1..6) {
+                while (user.listaEquipo.size != 6){
 
                     val personajesAleatorios = characterList.docs.random()
-                    user.listaEquipo.add((personajesAleatorios.name + " con ID: " + personajesAleatorios.id))
-                    usuarioRepository.save(user)
+
+                    if (!personajesAleatorios.seleccionado){
+                        user.listaEquipo.add(personajesAleatorios.id)
+                        personajesAleatorios.seleccionado = true
+                        usuarioRepository.save(user)
+
+                        characterList.docs.forEach {
+                            if (it.id == personajesAleatorios.id){
+                                it.seleccionado = true
+                            }
+                        }
+
+                    }
 
                 }
 
@@ -56,21 +67,32 @@ class UsuarioController (private val usuarioRepository: UsuarioRepository) {
         return "Token no encontrado"
     }
 
-    @PostMapping("liberarPersonaje")
-    fun liberarPersona(@PathVariable id : String, @PathVariable token: String): Any{
+    @GetMapping("liberarPersonaje/{id}/{token}")
+    fun liberarPersona(@PathVariable id : String, @PathVariable token: String): Any {
 
-        usuarioRepository.findAll().forEach { user->
+        usuarioRepository.findAll().forEach { user ->
 
-            if (user.token == token){
+            if (user.token == token) {
 
-                user.listaEquipo.forEach {
+                user.listaEquipo.forEach {list->
 
-                    if (it.contains(id)){
+                    if (list == id){
+                        user.listaEquipo.remove(list)
+                        usuarioRepository.save(user)
+
+                        characterList.docs.forEach {
+
+                            if (it.id == list)
+                                it.seleccionado = false
+                        }
+
                         return "Personaje liberado"
                     }
 
                 }
-                return "El personaje no pertenece al jugador"
+
+                return "El personaje no pertenece a este equipo"
+
             }
 
         }
@@ -78,6 +100,4 @@ class UsuarioController (private val usuarioRepository: UsuarioRepository) {
         return "Token invalido"
 
     }
-
 }
-
